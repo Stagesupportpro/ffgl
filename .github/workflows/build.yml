@@ -19,7 +19,7 @@ jobs:
           .\vcpkg\bootstrap-vcpkg.bat
 
       - name: Configurar CMake
-        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -A x64
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -A x64
 
       - name: Compilar
         run: cmake --build build --config Release
