@@ -1,0 +1,31 @@
+name: Build Window Capture plugin
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Instalar vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg
+          .\vcpkg\bootstrap-vcpkg.bat
+
+      - name: Configurar CMake
+        run: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -A x64
+
+      - name: Compilar
+        run: cmake --build build --config Release
+
+      - name: Subir resultado
+        uses: actions/upload-artifact@v4
+        with:
+          name: WindowCapture-build
+          path: build
